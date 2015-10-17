@@ -1,0 +1,240 @@
+<html>
+  <head>
+    <title>Hi</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="jquery.redirect.js"></script>
+    <script type="text/javascript">
+      $('document').ready(function() {
+        var numCompanies = 1;
+        var numProjects = 1;
+        $("#submit").click(function() {
+          var userData = {};
+          userData.name = $('#name').val();
+          userData.email = $('#email').val();
+          userData.location = $('#location').val();
+          userData.phone = $('#phone').val();
+          
+          // school (just doing one for now
+          var schools = [];
+          var school1 = {};
+          school1.name = $('.school #name').val();
+          school1.location = $('.school #location').val();
+          school1.degree = $('.school #degree').val();
+          school1.graduating = $('.school #graduating').val();
+          school1.gpa = $('.school #gpa').val();
+          schools.push(school1);
+          userData.schools = schools;
+          
+          // companies
+          var works = [];
+          $.each($('.work-experience').eq(0).find('.company'), function(i, company) {
+            var c = {};
+            c.name = $(company).find('#name').val();
+            c.location = $(company).find('#location').val();
+            c.position = $(company).find('#position').val();
+            c.date = $(company).find('#date').val();
+            c.lines = [];
+            works.push(c);
+          });
+          userData.works = works;
+
+
+          // projects
+          var projects = [];
+          $.each($('.projects').eq(0).find('.project'), function(i, project) {
+            var p = {};
+            p.name = $(project).find('#name').val();
+            p.date = $(project).find('#date').val();
+            p.desc = $(project).find('#description').val();
+            p.lines = [];
+            projects.push(p);
+          });
+          userData.projects = projects;
+          
+          var template = $('#template').val();
+          var json = { "template": template, "userInfo": userData };
+
+          $.post('/post', JSON.stringify(json), function (data) {
+            console.log(data);
+          });
+
+        });
+        $('#add-project').click(function() {
+          $('div.projects').append("" +
+              "<div class='project'>" +
+            "<div class='col-lg-2'>" +
+              "<label for='name' class='pull-left'>Project " + ++numProjects + "</label>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='name' name='name' placeholder='Name'>" +
+              "</div>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='date' name='date' placeholder='Date'>" +
+              "</div>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='description' name='description' placeholder='Description'>" +
+              "</div>" +
+            "</div>" +
+          "</div> ");
+        });
+        $('#add-company').click(function() {
+          $('div.work-experience').append("" +
+              "<div class='company'>" +
+            "<div class='col-lg-2'>" +
+              "<label for='name' class='pull-left'>Company " + ++numCompanies + "</label>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='name' name='name' placeholder='Name'>" +
+              "</div>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='location' name='location' placeholder='Company Location'>" +
+              "</div>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='position' name='position' placeholder='Position in Company'>" +
+              "</div>" +
+            "</div>" +
+            "<div class='form-group pull-left'>" +
+              "<div class='input-group'>" +
+                "<input type='text' class='form-control' id='date' name='date' placeholder='Date Worked There'>" +
+              "</div>" +
+            "</div>" +
+          "</div> ");
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div style="height: 50;"></div>
+    <div class="container">
+    <div class="form-group col-lg-2">
+      <label for="template">Select template:</label>
+      <select class="form-control" id="template">
+        <option>t1.tex</option>
+        <option>t2.tex</option>
+      </select>
+    </div>
+      <div class="row">
+        <div class="col-lg-10 basic-information">
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="location" name="location" placeholder="Location">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
+            </div>
+          </div>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col-lg-11 school">
+          <div class="col-lg-2">
+            <label for="name" class="pull-left">School</label>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="location" name="location" placeholder="Location">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="degree" name="degree" placeholder="Degree">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="graduating" name="graduating" placeholder="Graduating">
+            </div>
+          </div>
+          <div class="form-group pull-left">
+            <div class="input-group">
+              <input type="text" class="form-control" id="gpa" name="gpa" placeholder="GPA">
+            </div>
+          </div>
+        </div> 
+      </div>
+      <div class="row">
+        <div class="col-lg-10 work-experience">
+          <div class="company">
+            <div class="col-lg-2">
+              <label for="name" class="pull-left">Company 1</label>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+              </div>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="location" name="location" placeholder="Company Location">
+              </div>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="position" name="position" placeholder="Position in Company">
+              </div>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="date" name="date" placeholder="Date Worked There">
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-8 projects">
+          <div class="project">
+            <div class="col-lg-2">
+              <label for="name" class="pull-left">Project 1</label>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+              </div>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="date" name="date" placeholder="Date">
+              </div>
+            </div>
+            <div class="form-group pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+      <input type="submit" value="Add Company" id="add-company" class="btn btn-info">
+      <input type="submit" value="Add Project" id="add-project" class="btn btn-info">
+      <input type="submit" value="Submit" id="submit" class="btn btn-info">
+  </body>
+</html>
