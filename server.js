@@ -4,6 +4,7 @@ var http = require('http')
   , util = require('util')
   , mu   = require('mu2')
   , fs   = require('fs')
+  , path = require('path')
   , shortid = require ('shortid')
   , child_process = require('child_process');
 
@@ -30,8 +31,9 @@ app.post('/post', function(req, res) {
   var writer = fs.createWriteStream('./temp/' + postFile + '.tex');
   texFile.pipe(writer, { end: false });
   texFile.on('end', function() {
-    child_process.exec('TEXINPUTS="./templates:" pdflatex -output-directory assets/pdf -interaction=nonstopmode ./temp/' + postFile + '.tex').on('exit', function() {
-      res.send(url + '/assets/pdf/' + postFile + '.pdf');
+    child_process.exec('TEXINPUTS="./templates:" pdflatex -output-directory pdf -interaction=nonstopmode ./temp/' + postFile + '.tex').on('exit', function() {
+      res.send(url + '/pdf/' + postFile + '.pdf');
+      //res.download(path.resolve('./pdf/' + postFile + '.pdf'));
       //res.redirect('/pdf/' + postFile + '.pdf');
     });
   });

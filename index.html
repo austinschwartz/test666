@@ -56,7 +56,7 @@
           var json = { "template": template, "userInfo": userData };
 
           $.post('/post', JSON.stringify(json), function (data) {
-            console.log(data);
+            window.location = data;
           });
 
         });
